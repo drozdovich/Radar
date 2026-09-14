@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "companies": [
+    {
+      "company": "Kaspersky",
+      "aliases": ["Kaspersky Lab", "Касперский", "Лаборатория Касперского"],
+      "scope": "company",
+      "employees_min": 5001,
+      "employees_max": null,
+      "source_url": "https://careers.kaspersky.com/about",
+      "source_excerpt": ">5000 Experts on the team",
+      "checked_on": "2026-09-10"
+    }
+  ]
+}

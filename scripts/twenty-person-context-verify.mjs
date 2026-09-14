@@ -1,0 +1,17 @@
+import assert from'node:assert/strict';import{readFileSync,writeFileSync}from'node:fs';import{api,remote,sql}from'./twenty-admin.mjs';
+const root='.radar/people-context-2026-09-14/';const read=n=>JSON.parse(readFileSync(root+n));const map=read('id-map.json');const plan=read('repair-plan.json');
+const after={};for(const k of ['people','notes','noteTargets','tasks','taskTargets','companies','projectInbox']){const r=await api('/rest/'+k+'?limit=200',undefined,'GET');assert.equal(r.pageInfo.hasNextPage,false);after[k]=r.data[k];}
+writeFileSync(root+'records-after.json',JSON.stringify(after,null,2),{mode:0o600});
+const results=[];for(const m of map){const i=plan.find(i=>i.id===m.inboxId);const p=after.people.find(p=>p.id===m.person);const n=after.notes.find(n=>n.id===m.note);const t=after.tasks.find(t=>t.id===m.task);assert.ok(p&&n&&t,m.name);assert.ok(n.bodyV2.markdown.endsWith(i.summary.markdown),m.name+' full original');
+ assert.ok(JSON.parse(n.bodyV2.blocknote).some(b=>b.content.some(c=>c.type==='link'&&c.href===i.sourceLink.primaryLinkUrl)));
+ assert.ok(after.noteTargets.some(l=>l.noteId===n.id&&l.targetPersonId===p.id&&!l.targetProjectInboxItemId));assert.ok(after.taskTargets.some(l=>l.taskId===t.id&&l.targetPersonId===p.id&&!l.targetProjectInboxItemId));assert.ok(t.bodyV2.markdown.includes(i.personProfile.next_action.draft));
+ const expected=i.personProfile;assert.equal(p.name.firstName,expected.first_name);assert.equal(p.name.lastName,expected.last_name);
+ if(expected.linkedin_url)assert.equal(p.linkedinLink.primaryLinkUrl.replace(/\/$/,''),expected.linkedin_url.replace(/\/$/,''));
+ if(expected.job_title)assert.equal(p.jobTitle,expected.job_title);if(expected.telegram_username)assert.equal(p.telegram.primaryLinkUrl,'https://t.me/'+expected.telegram_username);
+ results.push({name:m.name,personId:p.id,noteId:n.id,taskId:t.id,fullOriginal:true,linked:true,fieldsVerified:true});}
+const w='workspace_radar';const ids=map.map(m=>`'${m.inboxId}'`).join(',');const feedback=JSON.parse(sql(`SELECT coalesce(json_agg(f),'[]') FROM radar_review.feedback f WHERE record_id IN (${ids});`));const oldFeedback=read('feedback-before.json').filter(f=>map.some(m=>m.inboxId===f.record_id));assert.equal(feedback.length,oldFeedback.length);for(const old of oldFeedback)assert.deepEqual(feedback.find(f=>f.id===old.id),old);
+const sources=JSON.parse(sql(`SELECT json_agg(i) FROM ${w}."_projectInboxItem" i WHERE id IN (${ids})`));for(const i of plan){const current=sources.find(s=>s.id===i.id);assert.equal(current.reviewStatus,i.reviewStatus);assert.equal(current.summaryMarkdown,i.summary.markdown);assert.equal(current.feedbackNoteMarkdown,i.feedbackNote.markdown);}
+for(const before of read('companies-before.json').data.companies)assert.deepEqual(after.companies.find(c=>c.id===before.id),before);
+// Previously existing unrelated notes and relations are unchanged.
+const changed=new Set(map.map(m=>m.inboxId));for(const n of read('notes-before.json').data.notes.filter(n=>!changed.has(n.id)))assert.deepEqual(after.notes.find(x=>x.id===n.id),n);
+writeFileSync(root+'verification.json',JSON.stringify({passed:true,people:results,feedbackEventsPreserved:feedback.length,companiesUnchanged:after.companies.length,ui:'see ui-verification.md; API does not prove UI'},null,2));console.log(JSON.stringify({passed:true,people:results.length,originals:results.length,tasks:results.length,feedbackPreserved:feedback.length}));

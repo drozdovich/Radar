@@ -1,0 +1,499 @@
+{
+  "projectTitle": "Radar — evidence and human review",
+  "projectSummary": "Telegram opportunity review with private source evidence, explicit decisions and a Twenty integration. Public prototype; synthetic offline demo.",
+  "layoutIntent": "flow",
+  "layoutDirection": "DOWN",
+  "keyFlows": [
+    {
+      "id": "daily",
+      "title": "Message to reviewed record",
+      "trigger": "Authorised operator run or schedule",
+      "outcome": "Evidence-backed Inbox cards and approved native records",
+      "steps": [
+        "telegram_sources",
+        "telegram_collector",
+        "postgres_source_of_truth",
+        "message_filtering",
+        "relevance_scoring",
+        "ready_digest",
+        "twenty_crm",
+        "native_results"
+      ]
+    },
+    {
+      "id": "feedback",
+      "title": "Decision feedback",
+      "trigger": "Read-only feedback export",
+      "outcome": "Current decisions remain authoritative after reversals",
+      "steps": [
+        "twenty_crm",
+        "feedback_export",
+        "message_filtering"
+      ]
+    }
+  ],
+  "unresolvedQuestions": [
+    "Complete live UI acceptance and verify Company/Opportunity identities.",
+    "Verify authorised rollout, health and continuous collection windows.",
+    "Provide a complete fresh installation and restore path."
+  ],
+  "areas": [
+    {
+      "id": "main_flow",
+      "title": "Current workflow",
+      "note": "Source evidence and personal settings stay private",
+      "color": "blue",
+      "evidence": [
+        "PRODUCT.md",
+        "ARCHITECTURE.md"
+      ],
+      "order": 0
+    },
+    {
+      "id": "legacy",
+      "title": "Alternative routes and local experiments",
+      "note": "Not required by the current assistant workflow",
+      "color": "gray",
+      "evidence": [
+        "N8N_RUNBOOK.md",
+        "FEEDBACK.md"
+      ],
+      "order": 1
+    }
+  ],
+  "entities": [
+    {
+      "id": "telegram_sources",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Configured Telegram sources",
+      "kind": "external",
+      "status": "operational",
+      "path": "SOURCES.md",
+      "purpose": "Configured Telegram sources",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "SOURCES.md"
+      ],
+      "order": 0
+    },
+    {
+      "id": "codex_schedule",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Operator scheduler",
+      "kind": "process",
+      "status": "operational",
+      "path": "AGENT_RUNBOOK.md",
+      "purpose": "Operator scheduler",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "AGENT_RUNBOOK.md"
+      ],
+      "order": 1
+    },
+    {
+      "id": "telegram_collector",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "TDLib collector",
+      "kind": "service",
+      "status": "operational",
+      "path": "src/telegram_project_radar/pipeline.py",
+      "purpose": "TDLib collector",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/pipeline.py"
+      ],
+      "order": 2
+    },
+    {
+      "id": "postgres_source_of_truth",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Private SQLite snapshots",
+      "kind": "store",
+      "status": "operational",
+      "path": "src/telegram_project_radar/pipeline.py",
+      "purpose": "Private SQLite snapshots",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/pipeline.py"
+      ],
+      "order": 3
+    },
+    {
+      "id": "message_completeness_check",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Reconciliation and comments",
+      "kind": "module",
+      "status": "operational",
+      "path": "src/telegram_project_radar/comment_audit.py",
+      "purpose": "Reconciliation and comments",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/comment_audit.py"
+      ],
+      "order": 4
+    },
+    {
+      "id": "message_filtering",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Assistant review",
+      "kind": "process",
+      "status": "operational",
+      "path": "src/telegram_project_radar/agent_review.py",
+      "purpose": "Assistant review",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/agent_review.py"
+      ],
+      "order": 5
+    },
+    {
+      "id": "relevance_scoring",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Human decision",
+      "kind": "process",
+      "status": "operational",
+      "path": "AGENT_RUNBOOK.md",
+      "purpose": "Human decision",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "AGENT_RUNBOOK.md"
+      ],
+      "order": 6
+    },
+    {
+      "id": "ready_digest",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Project Inbox: NEW",
+      "kind": "store",
+      "status": "operational",
+      "path": "src/telegram_project_radar/semantic_delivery.py",
+      "purpose": "Project Inbox: NEW",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/semantic_delivery.py"
+      ],
+      "order": 7
+    },
+    {
+      "id": "twenty_crm",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Twenty Review",
+      "kind": "interface",
+      "status": "operational",
+      "path": "apps/twenty-review/src/front-components/review.tsx",
+      "purpose": "Twenty Review",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "apps/twenty-review/src/front-components/review.tsx"
+      ],
+      "order": 8
+    },
+    {
+      "id": "native_results",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Native records, Notes and Tasks",
+      "kind": "store",
+      "status": "operational",
+      "path": "migrations/twenty",
+      "purpose": "Native records, Notes and Tasks",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "migrations/twenty"
+      ],
+      "order": 9
+    },
+    {
+      "id": "feedback_export",
+      "areaId": "main_flow",
+      "parentId": "",
+      "label": "Feedback snapshot",
+      "kind": "module",
+      "status": "operational",
+      "path": "scripts/radar-feedback-export.mjs",
+      "purpose": "Feedback snapshot",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "scripts/radar-feedback-export.mjs"
+      ],
+      "order": 10
+    },
+    {
+      "id": "n8n_orchestrator",
+      "areaId": "legacy",
+      "parentId": "",
+      "label": "Legacy orchestration",
+      "kind": "integration",
+      "status": "disabled",
+      "path": "N8N_RUNBOOK.md",
+      "purpose": "Legacy orchestration",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "N8N_RUNBOOK.md"
+      ],
+      "order": 11
+    },
+    {
+      "id": "selection_v2",
+      "areaId": "legacy",
+      "parentId": "",
+      "label": "Legacy selector",
+      "kind": "module",
+      "status": "operational",
+      "path": "src/telegram_project_radar/morning.py",
+      "purpose": "Legacy selector",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/morning.py"
+      ],
+      "order": 12
+    },
+    {
+      "id": "detail_enrichment",
+      "areaId": "legacy",
+      "parentId": "",
+      "label": "Allowlisted detail fetcher",
+      "kind": "module",
+      "status": "operational",
+      "path": "src/telegram_project_radar/detail_enrichment.py",
+      "purpose": "Allowlisted detail fetcher",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/detail_enrichment.py"
+      ],
+      "order": 13
+    },
+    {
+      "id": "feedback_sandbox",
+      "areaId": "legacy",
+      "parentId": "",
+      "label": "Local rule preview",
+      "kind": "module",
+      "status": "operational",
+      "path": "src/telegram_project_radar/feedback_preview.py",
+      "purpose": "Local rule preview",
+      "note": "Implemented source component; deployment and live acceptance are separate.",
+      "evidence": [
+        "src/telegram_project_radar/feedback_preview.py"
+      ],
+      "order": 14
+    }
+  ],
+  "relations": [
+    {
+      "id": "radar-codex_schedule-to-telegram_collector",
+      "from": "codex_schedule",
+      "to": "telegram_collector",
+      "label": "Explicitly configured schedule",
+      "kind": "control",
+      "contract": "Explicitly configured schedule",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-telegram_sources-to-telegram_collector",
+      "from": "telegram_sources",
+      "to": "telegram_collector",
+      "label": "полная история",
+      "kind": "data",
+      "contract": "полная история",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-telegram_collector-to-postgres_source_of_truth",
+      "from": "telegram_collector",
+      "to": "postgres_source_of_truth",
+      "label": "сохраняет снимки",
+      "kind": "data",
+      "contract": "сохраняет снимки",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-postgres_source_of_truth-to-message_completeness_check",
+      "from": "postgres_source_of_truth",
+      "to": "message_completeness_check",
+      "label": "границы, ID, содержимое",
+      "kind": "data",
+      "contract": "границы, ID, содержимое",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-message_completeness_check-to-message_filtering",
+      "from": "message_completeness_check",
+      "to": "message_filtering",
+      "label": "проверенные тексты и пробелы",
+      "kind": "data",
+      "contract": "проверенные тексты и пробелы",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-message_filtering-to-relevance_scoring",
+      "from": "message_filtering",
+      "to": "relevance_scoring",
+      "label": "предварительные карточки",
+      "kind": "data",
+      "contract": "предварительные карточки",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-relevance_scoring-to-ready_digest",
+      "from": "relevance_scoring",
+      "to": "ready_digest",
+      "label": "разрешённая партия",
+      "kind": "control",
+      "contract": "разрешённая партия",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-ready_digest-to-twenty_crm",
+      "from": "ready_digest",
+      "to": "twenty_crm",
+      "label": "источник и контекст",
+      "kind": "data",
+      "contract": "источник и контекст",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-twenty_crm-to-native_results",
+      "from": "twenty_crm",
+      "to": "native_results",
+      "label": "Approve и связанный результат",
+      "kind": "control",
+      "contract": "Approve и связанный результат",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-twenty_crm-to-feedback_export",
+      "from": "twenty_crm",
+      "to": "feedback_export",
+      "label": "текущий статус + история",
+      "kind": "data",
+      "contract": "текущий статус + история",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-codex_schedule-to-feedback_export",
+      "from": "codex_schedule",
+      "to": "feedback_export",
+      "label": "Explicitly configured schedule",
+      "kind": "control",
+      "contract": "Explicitly configured schedule",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-feedback_export-to-message_filtering",
+      "from": "feedback_export",
+      "to": "message_filtering",
+      "label": "проверенная свежая обратная связь",
+      "kind": "data",
+      "contract": "проверенная свежая обратная связь",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    },
+    {
+      "id": "radar-detail_enrichment-to-selection_v2",
+      "from": "detail_enrichment",
+      "to": "selection_v2",
+      "label": "старый путь полных описаний",
+      "kind": "data",
+      "contract": "старый путь полных описаний",
+      "mechanism": "See ARCHITECTURE.md",
+      "evidence": [
+        "ARCHITECTURE.md"
+      ],
+      "status": "existing"
+    }
+  ],
+  "removedAreaIds": [],
+  "removedEntityIds": [
+    "telegram_source_revacancy",
+    "telegram_search_mcp",
+    "message_details",
+    "digest_item_extractor",
+    "message_type_classifier",
+    "radar_cli",
+    "telegram_description_cache",
+    "message_urls",
+    "message_collection"
+  ],
+  "removedRelationIds": [
+    "flow_sources_to_collection",
+    "flow_collection_to_filtering",
+    "flow_filtering_to_scoring",
+    "flow_scoring_to_digest",
+    "collector_reads_telegram_sources",
+    "collector_stores_messages",
+    "n8n_orchestrates_collection",
+    "telegram_search_mcp_supports_manual_search",
+    "storage_to_completeness_check",
+    "completeness_check_to_filtering",
+    "message_filtering_to_type_classifier",
+    "type_classifier_to_digest_extractor",
+    "digest_extractor_to_scoring",
+    "filtering_to_selection_v2",
+    "selection_v2_to_scoring",
+    "revacancy_to_collector",
+    "collector_to_description_cache",
+    "description_cache_to_filtering",
+    "detail_enrichment_to_message_details",
+    "detail_enrichment_reads_telegram_messages",
+    "detail_enrichment_to_message_filtering",
+    "detail_enrichment_to_selection_v2",
+    "detail_enrichment_to_ready_digest"
+  ]
+}

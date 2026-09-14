@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "approved": [
+    {
+      "chat_id": -1000000000101,
+      "name": "Example Builders"
+    },
+    {
+      "chat_id": -1000000000102,
+      "name": "Example Careers"
+    },
+    {
+      "chat_id": -1000000000103,
+      "name": "Example Remote Jobs"
+    }
+  ],
+  "additional": [
+    {
+      "chat_id": -1000000000104,
+      "name": "Example Source 4"
+    },
+    {
+      "chat_id": -1000000000105,
+      "name": "Example Source 5"
+    },
+    {
+      "chat_id": -1000000000106,
+      "name": "Example Source 6"
+    },
+    {
+      "chat_id": -1000000000107,
+      "name": "Example Source 7"
+    },
+    {
+      "chat_id": -1000000000108,
+      "name": "Example Source 8"
+    },
+    {
+      "chat_id": -1000000000109,
+      "name": "Example Source 9"
+    }
+  ],
+  "comment_pairs": [
+    {
+      "channel_id": -1000000000107,
+      "discussion_id": -1000000000109
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "radar-project-review",
+  "version": "0.23.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"plan": "twenty plan", "apply": "twenty apply", "check": "tsc --noEmit"},
+  "dependencies": {"react": "19.2.8"},
+  "devDependencies": {"twenty-sdk": "2.37.0", "@types/react": "19.2.2", "typescript": "5.9.3"}
+}

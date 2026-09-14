@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "approved": [
+    {
+      "chat_id": -1000000000101,
+      "name": "Example Builders"
+    },
+    {
+      "chat_id": -1000000000102,
+      "name": "Example Careers"
+    }
+  ],
+  "additional": [],
+  "comment_pairs": []
+}

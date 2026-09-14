@@ -1,0 +1,17 @@
+{
+  "name": "telegram-project-radar",
+  "version": "0.34.0",
+  "private": true,
+  "devDependencies": {
+    "repo-canvas": "git+https://github.com/m0ast-git/repo-canvas.git#68e7588fb7527fba4aacacb367fc4a41afb5f886"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test apps/twenty-review/tests/*.test.ts tests/*.test.mjs",
+    "check": "python3 scripts/check-repo.py && python3 scripts/check-public.py && npm run canvas:check && uv run --locked python -m pytest && npm test && npm --prefix apps/twenty-review run check",
+    "repo-canvas": "repo-canvas",
+    "repo-canvas:start": "repo-canvas start",
+    "repo-canvas:check": "repo-canvas check",
+    "canvas:check": "node scripts/sync-repo-canvas.mjs --check",
+    "canvas:sync": "node scripts/sync-repo-canvas.mjs --apply"
+  }
+}
